@@ -34,10 +34,11 @@ export const logoutUser = async () => {
 
 export const signInWithGoogle = async () => {
   try {
-    const result = await signInWithPopup(authInstance, googleProvider);
-    return result.user;
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+    return result;
   } catch (error) {
-    console.error('Error signing in with Google:', error);
+    console.error("Error signing in with Google: ", error);
     throw error;
   }
 };

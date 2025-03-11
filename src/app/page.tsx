@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { signInWithGoogle } from '@/lib/firebase/firebaseUtils';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function Home() {
   const { user, loading } = useAuth();
@@ -11,18 +12,25 @@ export default function Home() {
 
   const handleAuth = async () => {
     try {
-      // If user is already logged in, just navigate to dashboard
+      // If user is already logged in, navigate to chat
       if (user) {
-        router.push('/dashboard');
+        router.push('/chat');
         return;
       }
       
       // Otherwise sign in with Google
-      await signInWithGoogle();
-      // After successful login, redirect to dashboard
-      router.push('/dashboard');
+      const result = await signInWithGoogle();
+      
+      // Only redirect if authentication succeeded
+      if (result && result.user) {
+        // Add a small delay to ensure Firebase auth state is updated
+        setTimeout(() => {
+          router.push('/chat');
+        }, 500);
+      }
     } catch (error) {
       console.error('Authentication error:', error);
+      alert('Authentication failed. Please try again.');
     }
   };
 
@@ -55,10 +63,10 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Updated Main Content with better centering */}
+      {/* Main Content */}
       <div className="container mx-auto px-4 py-12 flex items-center justify-center min-h-[calc(100vh-160px)]">
         <div className="flex flex-col md:flex-row items-center justify-center gap-12 max-w-6xl">
-          {/* Replace placeholder with Plato SVG */}
+          {/* Plato SVG */}
           <div className="w-64 h-64 flex-shrink-0 relative">
             <Image
               src="/images/plato_6.svg"
@@ -69,27 +77,17 @@ export default function Home() {
             />
           </div>
           
-          {/* Text content - centered */}
+          {/* Text content */}
           <div className="max-w-xl text-center md:text-left">
             <div className="mb-6">
               <p className="mb-4">
-                Tollere odium autem in nostra potestate sint, ab omnibus et
-                contra naturam transferre in nobis. Sed interim tuo
-                desiderio supprimenti: si vis aliqua quae in manu tua tibi
-                necesse confudentur et quae, quod laudabile esset, nihil
-                tamen possides.
+                Engage in profound discussions with history's greatest philosophical minds.
+                Explore complex ideas, challenge your thinking, and gain insights from the
+                wisdom of the ages.
               </p>
               <p className="mb-4">
-                Oportet uti solum de actibus prosequionem et fugam, haec
-                leniter et blandus et reservato.
-              </p>
-              <p className="mb-4">
-                Quae tibi placent quicunq prosunt aut diligebat multum, quod
-                memor sis ad communis sunt ab initio minima. Quod si,
-                exempli gratia, cupidam rerum in propria sunt ceramic
-                calices, admoneris te saxum Ceramic, quod sit generalis
-                nocuit, in puius es tu cupidium. Deinde, si exempli, non
-                turbarentur.
+                Philosopher's Mosaic brings the brilliance of Plato, Aristotle, Socrates,
+                and many more directly to your conversations.
               </p>
             </div>
             
