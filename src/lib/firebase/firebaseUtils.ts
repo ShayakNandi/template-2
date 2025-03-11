@@ -1,8 +1,8 @@
 import { auth, db, storage } from "./firebase";
 import {
-  signOut,
   GoogleAuthProvider,
   signInWithPopup,
+  signOut as firebaseSignOut
 } from "firebase/auth";
 import {
   collection,
@@ -13,19 +13,38 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getAuth } from 'firebase/auth';
+import { app } from './firebase';
+
+// Get Firebase auth instance
+const authInstance = getAuth(app);
+
+// Google authentication provider
+const googleProvider = new GoogleAuthProvider();
 
 // Auth functions
-export const logoutUser = () => signOut(auth);
-
-export const signInWithGoogle = async () => {
-  const provider = new GoogleAuthProvider();
+export const logoutUser = async () => {
   try {
-    const result = await signInWithPopup(auth, provider);
-    return result.user;
+    await firebaseSignOut(authInstance);
   } catch (error) {
-    console.error("Error signing in with Google", error);
+    console.error('Error signing out:', error);
     throw error;
   }
+};
+
+export const signInWithGoogle = async () => {
+  try {
+    const result = await signInWithPopup(authInstance, googleProvider);
+    return result.user;
+  } catch (error) {
+    console.error('Error signing in with Google:', error);
+    throw error;
+  }
+};
+
+// Check if user is logged in
+export const getCurrentUser = () => {
+  return authInstance.currentUser;
 };
 
 // Firestore functions

@@ -1,48 +1,114 @@
-import Link from "next/link";
+'use client';
+
+import Image from 'next/image';
+import { useAuth } from '@/lib/hooks/useAuth';
+import { signInWithGoogle } from '@/lib/firebase/firebaseUtils';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  const handleAuth = async () => {
+    try {
+      // If user is already logged in, just navigate to dashboard
+      if (user) {
+        router.push('/dashboard');
+        return;
+      }
+      
+      // Otherwise sign in with Google
+      await signInWithGoogle();
+      // After successful login, redirect to dashboard
+      router.push('/dashboard');
+    } catch (error) {
+      console.error('Authentication error:', error);
+    }
+  };
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-8">
-      <div>
-        <h2 className="text-2xl font-semibold text-center border p-4 font-mono rounded-md">
-          Get started by choosing a template path from the /paths/ folder.
-        </h2>
+    <main className="min-h-screen bg-black text-gray-200">
+      {/* Header */}
+      <header className="bg-gray-200 p-4 flex justify-between items-center">
+        <div className="flex items-center">
+          {/* Logo placeholder */}
+          <div className="h-8 w-8 bg-indigo-500 rounded-full"></div>
+        </div>
+        
+        <div className="flex-1 text-center">
+          <h1 className="text-gray-800 font-medium text-xl">Welcome to Philosopher's Mosaic</h1>
+        </div>
+        
+        <div className="flex gap-2">
+          <button 
+            onClick={handleAuth}
+            className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded"
+          >
+            Login
+          </button>
+          <button 
+            onClick={handleAuth}
+            className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded"
+          >
+            Sign Up
+          </button>
+        </div>
+      </header>
+
+      {/* Updated Main Content with better centering */}
+      <div className="container mx-auto px-4 py-12 flex items-center justify-center min-h-[calc(100vh-160px)]">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-12 max-w-6xl">
+          {/* Replace placeholder with Plato SVG */}
+          <div className="w-64 h-64 flex-shrink-0 relative">
+            <Image
+              src="/images/plato_6.svg"
+              alt="Plato illustration"
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
+          
+          {/* Text content - centered */}
+          <div className="max-w-xl text-center md:text-left">
+            <div className="mb-6">
+              <p className="mb-4">
+                Tollere odium autem in nostra potestate sint, ab omnibus et
+                contra naturam transferre in nobis. Sed interim tuo
+                desiderio supprimenti: si vis aliqua quae in manu tua tibi
+                necesse confudentur et quae, quod laudabile esset, nihil
+                tamen possides.
+              </p>
+              <p className="mb-4">
+                Oportet uti solum de actibus prosequionem et fugam, haec
+                leniter et blandus et reservato.
+              </p>
+              <p className="mb-4">
+                Quae tibi placent quicunq prosunt aut diligebat multum, quod
+                memor sis ad communis sunt ab initio minima. Quod si,
+                exempli gratia, cupidam rerum in propria sunt ceramic
+                calices, admoneris te saxum Ceramic, quod sit generalis
+                nocuit, in puius es tu cupidium. Deinde, si exempli, non
+                turbarentur.
+              </p>
+            </div>
+            
+            <div className="flex justify-center md:justify-end">
+              <button 
+                onClick={handleAuth}
+                className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-md font-medium"
+              >
+                Get Started
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div>
-        <h1 className="text-6xl font-bold text-center">Make anything you imagine 🪄</h1>
-        <h2 className="text-2xl text-center font-light text-gray-500 pt-4">
-          This whole page will be replaced when you run your template path.
-        </h2>
-      </div>
-      <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="border rounded-lg p-6 hover:bg-gray-100 transition-colors">
-          <h3 className="text-xl font-semibold">AI Chat App</h3>
-          <p className="mt-2 text-sm text-gray-600">
-            An intelligent conversational app powered by AI models, featuring real-time responses
-            and seamless integration with Next.js and various AI providers.
-          </p>
-        </div>
-        <div className="border rounded-lg p-6 hover:bg-gray-100 transition-colors">
-          <h3 className="text-xl font-semibold">AI Image Generation App</h3>
-          <p className="mt-2 text-sm text-gray-600">
-            Create images from text prompts using AI, powered by the Replicate API and Next.js.
-          </p>
-        </div>
-        <div className="border rounded-lg p-6 hover:bg-gray-100 transition-colors">
-          <h3 className="text-xl font-semibold">Social Media App</h3>
-          <p className="mt-2 text-sm text-gray-600">
-            A feature-rich social platform with user profiles, posts, and interactions using
-            Firebase and Next.js.
-          </p>
-        </div>
-        <div className="border rounded-lg p-6 hover:bg-gray-100 transition-colors">
-          <h3 className="text-xl font-semibold">Voice Notes App</h3>
-          <p className="mt-2 text-sm text-gray-600">
-            A voice-based note-taking app with real-time transcription using Deepgram API, 
-            Firebase integration for storage, and a clean, simple interface built with Next.js.
-          </p>
-        </div>
-      </div>
+
+      {/* Footer */}
+      <footer className="py-6 text-center text-gray-400 text-sm">
+        <p>Brought to you by StudyMeister</p>
+      </footer>
     </main>
   );
 }
