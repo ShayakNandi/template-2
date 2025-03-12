@@ -23,7 +23,7 @@ export default function PhilosopherSelector({
   return (
     <div className="relative">
       <button 
-        className="flex items-center space-x-2 bg-slate-200 px-4 py-2 rounded-md hover:bg-slate-300 transition"
+        className="flex items-center space-x-2 border border-gray-700 bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition"
         onClick={() => setIsOpen(!isOpen)}
       >
         <span>Change Philosopher</span>
@@ -43,11 +43,11 @@ export default function PhilosopherSelector({
       </button>
       
       {isOpen && (
-        <div className="absolute top-full right-0 mt-2 bg-white rounded-md shadow-lg overflow-hidden z-10 w-56">
+        <div className="absolute top-full right-0 mt-2 bg-gray-800 rounded-md shadow-lg overflow-hidden z-10 w-56">
           {philosophers.map(philosopher => (
             <button
               key={philosopher.id}
-              className="flex items-center space-x-2 w-full px-4 py-2 text-left hover:bg-slate-100"
+              className="flex items-center space-x-2 w-full px-4 py-2 text-left text-white hover:bg-gray-700"
               onClick={() => {
                 onSelect(philosopher);
                 setIsOpen(false);
