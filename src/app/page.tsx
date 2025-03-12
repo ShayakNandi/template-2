@@ -5,6 +5,7 @@ import { useAuth } from '@/lib/hooks/useAuth';
 import { signInWithGoogle } from '@/lib/firebase/firebaseUtils';
 import { useRouter } from 'next/navigation';
 import ImageSlider from './components/ImageSlider';
+import ConstellationBackground from './components/ConstellationBackground';
 
 export default function Home() {
   const { user, loading } = useAuth();
@@ -41,6 +42,9 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center p-4 md:p-8 lg:p-12 bg-gray-900 pt-16">
+      {/* Add constellation background */}
+      <ConstellationBackground />
+      
       {/* Header - Improved styling */}
       <header className="bg-gray-950 shadow-xl p-4 flex items-center w-full fixed top-0 left-0 z-10 rounded-b-lg border-b border-gray-800">
         <div className="flex items-center">
@@ -69,9 +73,12 @@ export default function Home() {
       </header>
 
       {/* Main Content - Only Image Slider */}
-      <div className="container mx-auto max-w-6xl my-8 flex flex-col justify-center items-center">
+      <div className="container mx-auto max-w-6xl my-8 flex flex-col justify-center items-center z-1 relative">
         {/* Added title above the image slider */}
         <h1 className="text-4xl font-bold text-white mb-6">Welcome to Philosopher's Mosaic</h1>
+        
+        {/* Add single line description */}
+        <p className="text-xl text-gray-300 mb-8">Engage in meaningful conversations with history's greatest philosophical minds through the power of AI.</p>
         
         {/* Image Slider */}
         <ImageSlider images={images} autoPlayInterval={5000} />
@@ -96,7 +103,7 @@ export default function Home() {
       </div>
 
       {/* Footer - Updated attribution */}
-      <footer className="py-6 text-center text-gray-400 text-sm">
+      <footer className="py-6 text-center text-gray-400 text-sm relative z-1">
         <p>Brought to you by Shaykey Meister</p>
       </footer>
     </main>
