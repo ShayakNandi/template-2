@@ -104,7 +104,7 @@ export default function Home() {
 
       {/* Footer - Updated attribution */}
       <footer className="py-6 text-center text-gray-400 text-sm relative z-1">
-        <p>Brought to you by Shaykey Meister</p>
+        <p>Brought to you by ShakyMeister</p>
       </footer>
     </main>
   );
